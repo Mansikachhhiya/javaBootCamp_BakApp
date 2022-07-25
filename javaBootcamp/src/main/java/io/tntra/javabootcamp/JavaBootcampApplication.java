@@ -16,5 +16,6 @@ public class JavaBootcampApplication {
   @GetMapping("/hello")
   public String sayHello(){
     return "Hello world!!";
+
   }
 }

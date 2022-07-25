@@ -1,4 +1,4 @@
-package exception;
+package io.tntra.javabootcamp.exception;
 
 public class miniBalanceExcepction extends Exception{
 

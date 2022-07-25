@@ -1,6 +1,6 @@
-package Model;
+package io.tntra.javabootcamp.Model;
 
-import Account_type.Account_type;
+import io.tntra.javabootcamp.Account_type.Account_type;
 
 import java.math.BigDecimal;
 
@@ -8,6 +8,8 @@ public class Account {
   private String ownerName;
   private BigDecimal balance;
   private Account_type account_type;
+  private BigDecimal miniBalance = new BigDecimal(0);
+  private BigDecimal overDraftLimit = new BigDecimal(0);
 
   public String getOwnerName() {
     return ownerName;
