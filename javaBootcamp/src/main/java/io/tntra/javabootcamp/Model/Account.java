@@ -8,8 +8,8 @@ public class Account {
   private String ownerName;
   private BigDecimal balance;
   private Account_type account_type;
-  private BigDecimal miniBalance = new BigDecimal(0);
-  private BigDecimal overDraftLimit = new BigDecimal(0);
+  private BigDecimal miniBalance;
+  private BigDecimal overDraftLimit;
 
   public String getOwnerName() {
     return ownerName;
@@ -31,4 +31,20 @@ public class Account {
   }
 
 
+  public BigDecimal getMiniBalance() {
+    return miniBalance;
+  }
+
+  public void setMiniBalance(BigDecimal miniBalance) {
+    this.miniBalance = miniBalance;
+  }
+
+  public BigDecimal getOverDraftLimit() {
+    return overDraftLimit;
+  }
+
+  public BigDecimal setOverDraftLimit(BigDecimal overDraftLimit) {
+    this.overDraftLimit = overDraftLimit;
+    return overDraftLimit;
+  }
 }

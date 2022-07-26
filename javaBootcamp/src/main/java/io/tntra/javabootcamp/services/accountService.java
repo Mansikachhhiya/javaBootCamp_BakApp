@@ -1,6 +1,10 @@
 package io.tntra.javabootcamp.services;
 
+import io.tntra.javabootcamp.Account_type.Account_type;
 import io.tntra.javabootcamp.Model.Account;
+import io.tntra.javabootcamp.exception.InSufficientBalance;
+import io.tntra.javabootcamp.exception.miniBalanceExcepction;
+import io.tntra.javabootcamp.exception.ownerException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -8,96 +12,86 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-@Service
-public class accountService implements BankAccount {
-  private static Map<String, Account> accountInfo = new HashMap<>();
 
-//  static {
-//    Account MansiAccount = new Account();
-//    MansiAccount.setOwnerName("Mansi");
-//    MansiAccount.setBalance(BigDecimal.valueOf(10000));
-//    MansiAccount.setAccount_type(Account_type.CURRENT);
-//    accountInfo.put(MansiAccount.getOwnerName(), MansiAccount);
-//    Account UdayAccount = new Account();
-//    UdayAccount.setOwnerName("Uday");
-//    UdayAccount.setBalance(BigDecimal.valueOf(20000));
-//    UdayAccount.setAccount_type(Account_type.SAVING);
-//    accountInfo.put(UdayAccount.getOwnerName(), UdayAccount);
-//  }
+public abstract class accountService  implements BankAccount {
+  private static final Map<String, Account> accountInfo = new HashMap<>();
 
   @Override
   public void createAccount(Account account) {
+
     accountInfo.put(account.getOwnerName(), account);
   }
 
   @Override
-  public void deleteAccount(String ownerName) {
-    accountInfo.remove(ownerName);
+  public void deleteAccount(String ownerName) throws ownerException {
+    if (checkOwner(ownerName)) {
+      accountInfo.remove(ownerName);
+    }
   }
 
   @Override
-  public Collection<Account> getAccount() {
+  public Collection<Account> get_Account() throws ownerException {
+
     return accountInfo.values();
   }
 
   @Override
-  public void updateAccount(String ownerName, Account account) {
-    accountInfo.remove(ownerName);
-    account.setOwnerName(ownerName);
-    accountInfo.put(ownerName, account);
+  public Account getAccount(String ownerName) throws ownerException {
+    return accountInfo.get(ownerName);
+
   }
+
   @Override
-  public BigDecimal get_Balance(String ownerName) {
-    return accountInfo.get(ownerName).getBalance();
+  public void updateAccount(String ownerName, Account account) throws ownerException {
+    if (checkOwner(ownerName)) {
+      accountInfo.remove(ownerName);
+      account.setOwnerName(ownerName);
+      accountInfo.put(ownerName, account);
+    }
   }
-}
-//  private String ownerName;
-//  private BigDecimal balance;
-//  private  Account_type account_type;
-//
-//  private BigDecimal miniBalance = new BigDecimal(0);
-//
-//
-//
-//  private BigDecimal overDraftLimit = new BigDecimal(0);
-//  protected accountModel(String ownerName, BigDecimal balance, Account_type account_type) throws miniBalanceExcepction {
-//    this.ownerName=ownerName;
-//    try{
-//      if(balance.compareTo(miniBalance)>=0){
-//        this.balance = balance;
-//      }
-//      else {
-//        throw new miniBalanceExcepction("Minimum Balance Required ");
-//      }
-//    } catch (miniBalanceExcepction e) {
-//      e.getMessage();
-//      throw new miniBalanceExcepction("Minimum Balance Required ");
-//    }
-//    this.account_type = account_type;
-//
-//  }
-//  protected void  print_details(){
-//    System.out.println("owner Name: "+ownerName);
-//    System.out.println("Current Balance :"+balance);
-//    System.out.println("Account Type: "+account_type);
-//  }
-//  //Deposit Function
-//  @Override
-//  public BigDecimal deposit(BigDecimal amount){
-//    this.balance = this.balance.add(amount);
-//
-//    return balance;
-//  }
-//
-//
-//
-//
-//  //Withdraw Function
-//  @Override
-//  public void withdraw(BigDecimal amount) throws InSufficientBalance {
+
+  @Override
+  public BigDecimal get_Balance(String ownerName) throws ownerException {
+    if (checkOwner(ownerName)) {
+      return accountInfo.get(ownerName).getBalance();
+    }
+    return null;
+  }
+
+  //Deposit function
+  public BigDecimal deposit(String ownerName, BigDecimal amount) throws ownerException {
+    if (checkOwner(ownerName)) {
+      BigDecimal currentBalance = get_Balance(ownerName);
+      BigDecimal newBalance = currentBalance.add(amount);
+      accountInfo.get(ownerName).setBalance(newBalance);
+      return newBalance;
+    }
+    return null;
+  }
+
+  @Override
+  public void withdraw(BigDecimal amount, String ownerName) throws ownerException, InSufficientBalance {
+    try {
+      if (checkBalance(amount,ownerName)) {
+        BigDecimal currentBalance = get_Balance(ownerName);
+        BigDecimal balance = currentBalance.subtract(amount);
+        accountInfo.get(ownerName).setBalance(balance);
+      }else {
+        throw new InSufficientBalance("Insufficient Balance in your Account");
+      }
+    }catch (InSufficientBalance e ){
+      //System.out.println(e.getMessage());
+      throw new InSufficientBalance("Insufficient Balance in your Account");
+    }
+  }
+
+
+//  public void withdraw(String ownerName, BigDecimal amount) throws ownerException,InSufficientBalance {
 //    try {
 //      if (checkBalance(amount)) {
-//        this.balance = this.balance.subtract(amount);
+//        BigDecimal currentBalance = get_Balance(ownerName);
+//        BigDecimal balance = currentBalance.subtract(amount);
+//        accountInfo.get(ownerName).setBalance(balance);
 //      }else {
 //        throw new InSufficientBalance("Insufficient Balance in your Account");
 //      }
@@ -106,50 +100,21 @@ public class accountService implements BankAccount {
 //      throw new InSufficientBalance("Insufficient Balance in your Account");
 //    }
 //  }
-//
-//  // Get method for ownerName
-//  public String getOwnerName() {
-//    return ownerName;
-//  }
-//  public boolean checkBalance(BigDecimal amount) {
-//    if (this.account_type == Account_type.CURRENT) {
-//      BigDecimal overDraft = overDraftLimit .multiply(this.balance);
-//      BigDecimal Temp_balance = this.balance.add(overDraft);
-//      return Temp_balance.compareTo(amount)>=0;
-//
-//    } else {
-//      return this.balance.compareTo(amount) >= 0;
-//    }
-//  }
-//  //set method for ownerName
-//  public void setOwnerName(String ownerName) {
-//    this.ownerName = ownerName;
-//  }
-//  // get method for balance
-//  public BigDecimal getBalance() {
-//    return balance;
-//  }
-//  //set method for balance
-//  public void setBalance(BigDecimal balance) {
-//    this.balance = balance;
-//  }
-//  //get method for mini-balance
-//  public BigDecimal getMiniBalance() {
-//    return miniBalance;
-//  }
-//  // set method for mini-balance
-//  public void setMiniBalance(BigDecimal miniBalance) {
-//    this.miniBalance = miniBalance;
-//  }
-//  //get method for over-Draft-limit
-//  public BigDecimal getOverDraftLimit() {
-//    return overDraftLimit;
-//  }
-//  //set method for over-Draft-limit
-//  public void setOverDraftLimit(BigDecimal overDraftLimit) {
-//    this.overDraftLimit = overDraftLimit;
-//  }
-//
-//
-//}
+  public boolean checkOwner(String ownerName) {
+    return accountInfo.containsKey(ownerName);
+  }
 
+  public boolean checkBalance(BigDecimal amount, String ownerName) throws ownerException{
+      BigDecimal currentBalance = get_Balance(ownerName);
+
+    if (checkOwner(ownerName) && accountInfo.get(ownerName).getAccount_type() == Account_type.CURRENT) {
+      BigDecimal overDraftLimit = accountInfo.get(ownerName).getOverDraftLimit();
+      overDraftLimit = accountInfo.get(ownerName).setOverDraftLimit(BigDecimal.valueOf(0.40));
+      BigDecimal newoverDraftLimit = overDraftLimit.multiply(accountInfo.get(ownerName).getBalance());
+
+      BigDecimal newBalance = currentBalance.add(overDraftLimit);
+      return newBalance.compareTo(amount) >= 0;
+    }
+    return currentBalance.compareTo(amount)>=0;
+  }
+}
