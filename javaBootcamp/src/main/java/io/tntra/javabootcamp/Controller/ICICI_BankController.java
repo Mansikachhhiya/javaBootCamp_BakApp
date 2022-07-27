@@ -5,7 +5,7 @@ import io.tntra.javabootcamp.exception.InSufficientBalance;
 import io.tntra.javabootcamp.exception.miniBalanceExcepction;
 import io.tntra.javabootcamp.exception.ownerException;
 import io.tntra.javabootcamp.services.ICICI_BankService;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,78 +24,7 @@ public class ICICI_BankController {
     this.icici_bankService = icici_bankService;
   }
 
-  //  @GetMapping("/ICICIInfo/account/{ownerName}")
-//  public ResponseEntity<Object> getAccount(@PathVariable("ownerName") String ownerName,@RequestBody Map<String, Account> ICICIInfo) throws ownerException {
-//    try {
-//      return new ResponseEntity<>(icici_bankService.getAccount(ownerName,ICICIInfo), HttpStatus.OK);
-//    } catch (ownerException e) {
-//      throw new ownerException("Invalid owner Name");
-//    }
-//  }
-//
-//  @GetMapping("/ICICIInfo/getAccount")
-//  public ResponseEntity<Object> get_Account(@RequestBody Map<String, Account> ICICIInfo) throws ownerException {
-//    try {
-//      return new ResponseEntity<>(icici_bankService.get_Account(ICICIInfo), HttpStatus.OK);
-//    } catch (ownerException e) {
-//      throw new ownerException("Invalid owner Name");
-//    }
-//  }
-//
-//  @RequestMapping(value = "/ICICIInfo/account/{ownerName}", method = RequestMethod.PUT)
-//  public ResponseEntity<Object> updateAccount(@PathVariable("ownerName") String ownerName, @RequestBody Account account,@RequestBody Map<String, Account> ICICIInfo) throws ownerException {
-//    try {
-//      icici_bankService.updateAccount(ownerName, account,ICICIInfo);
-//      return new ResponseEntity<>("Account is updated successfully ", HttpStatus.OK);
-//    } catch (ownerException e) {
-//      throw new ownerException("Invalid owner Name");
-//    }
-//
-//  }
-//
-//  @RequestMapping(value = "/ICICIInfo/account/{ownerName}", method = RequestMethod.DELETE)
-//  public ResponseEntity<Object> deleteAccount(@PathVariable("ownerName") String ownerName,@RequestBody Map<String, Account> ICICIInfo) throws ownerException {
-//    try {
-//      icici_bankService.deleteAccount(ownerName,ICICIInfo);
-//      return new ResponseEntity<>("Account is Delete successfully", HttpStatus.OK);
-//    } catch (ownerException e) {
-//      throw new ownerException("Invalid owner Name");
-//    }
-//  }
-//
-//  @RequestMapping(value = "/ICICIInfo/account", method = RequestMethod.POST)
-//  public ResponseEntity<Object> createAccount(@RequestBody Account account ,@RequestBody Map<String, Account> ICICIInfo)  {
-//    icici_bankService.createAccount(account,ICICIInfo);
-//    return new ResponseEntity<>("Account is created successfully", HttpStatus.CREATED);
-//  }
-//
-//  @RequestMapping(value = "/ICICIInfo/getAccountBalance/{ownerName}", method = RequestMethod.GET)
-//  public ResponseEntity<Object> get_Balance(@PathVariable("ownerName") String ownerName,@RequestBody Map<String, Account> ICICIInfo) throws ownerException {
-//    try {
-//      return new ResponseEntity<>(ownerName + " Account Balance:" + icici_bankService.get_Balance(ownerName,ICICIInfo), HttpStatus.OK);
-//    } catch (ownerException e) {
-//      throw new ownerException("Invalid owner Name");
-//    }
-//  }
-//
-//  @RequestMapping(value = "/ICICIInfo/deposit/{ownerName}/{amount}", method = RequestMethod.PATCH)
-//  public ResponseEntity<Object> deposit(@PathVariable("amount") BigDecimal amount, @PathVariable String ownerName,@RequestBody Map<String, Account> ICICIInfo) throws ownerException {
-//    try {
-//      icici_bankService.deposit(ownerName, amount,ICICIInfo);
-//      return new ResponseEntity<>("Deposit successfully", HttpStatus.OK);
-//    } catch (ownerException e) {
-//      throw new ownerException("Invalid owner Name");
-//    }
-//  }
-//  @RequestMapping(value = "/ICICIInfo/withdraw/{ownerName}/{amount}", method = RequestMethod.PATCH)
-//  public ResponseEntity<Object> withdraw(@PathVariable("amount") BigDecimal amount, @PathVariable String ownerName,@RequestBody Map<String, Account> ICICIInfo) throws ownerException ,InSufficientBalance{
-//    try {
-//      icici_bankService.withdraw(amount, ownerName,ICICIInfo);
-//      return new ResponseEntity<>("Withdraw successfully", HttpStatus.OK);
-//    } catch (ownerException e) {
-//      throw new ownerException("Invalid owner Name");
-//    }
-//  }
+
 @GetMapping("/ICICI/account/{ownerName}")
 public ResponseEntity<Object> getAccount(@PathVariable("ownerName") String ownerName)  {
   try {
