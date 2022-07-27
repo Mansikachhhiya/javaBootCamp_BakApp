@@ -3,10 +3,12 @@ package io.tntra.javabootcamp.services;
 import io.tntra.javabootcamp.Account_type.Account_type;
 import io.tntra.javabootcamp.exception.InSufficientBalance;
 import io.tntra.javabootcamp.exception.ownerException;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 
 public class UPIService {
+  @Autowired
   accountService accountService;
   private final int upi_id;
   private Account_type account_type;
